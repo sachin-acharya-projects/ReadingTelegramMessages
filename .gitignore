@@ -2,5 +2,5 @@ base # virtual environment
 channel_messages.json
 ChannelMessages.py
 test.py
-config.ini
+configD.ini
 *.session
