@@ -5,6 +5,7 @@ _____________________________________________________
 ````ini
 [Telegram]
     # Structure for config.ini file
+    # quote "" can be ommited
     api_id = YOUR_API_ID_FROM_TELEGRAM
     api_hash = YOUR_API_HASH_FROM_TELEGRAM
 
