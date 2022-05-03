@@ -1,2 +1,13 @@
 # ReadingTelegramMessages
 This simple program reads Messages from telegram using Telegram API and Telethon Python Package
+_____________________________________________________
+### Configurations
+````ini
+[Telegram]
+    # RENAME THIS FILE (CONFIG_SAMPLE) AS CONFIG => (config.ini)
+    api_id = YOUR_API_ID_FROM_TELEGRAM
+    api_hash = YOUR_API_HASH_FROM_TELEGRAM
+
+    phone = YOUR_TELEGRAM_PHONE_NUMBER_WITH_COUNTRY_CODE(+91 XXX XXXXXXX)
+    username = YOUR_TELEGRAM_USERNAME
+````
