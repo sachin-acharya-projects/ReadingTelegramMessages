@@ -4,7 +4,7 @@ _____________________________________________________
 ### Configurations
 ````ini
 [Telegram]
-    # RENAME THIS FILE (CONFIG_SAMPLE) AS CONFIG => (config.ini)
+    # Structure for config.ini file
     api_id = YOUR_API_ID_FROM_TELEGRAM
     api_hash = YOUR_API_HASH_FROM_TELEGRAM
 
