@@ -106,7 +106,10 @@ async def main(phone):
         except:
             output_file = "telegram_personal_me"
         with open(f'{output_file}.json', 'w') as outfile:
-            json.dump(all_messages, outfile, cls=DateTimeEncoder, indent=4)
+            if input("Sort? [Y/N]: ").lower() == 'y':
+                json.dump(all_messages.sort(lambda x:x['id']), outfile, cls=DateTimeEncoder, indent=4)
+            else:
+                json.dump(all_messages, outfile, cls=DateTimeEncoder, indent=4)
     print(f"{Fore.GREEN}Messages has been retrived and saved in {output_file}.json file successfully")
     
 with client:
