@@ -37,6 +37,8 @@ username = config['Telegram']['username']
 # Creating Client Object and connecting using these credentials
 
 client = TelegramClient(username, api_id=api_id, api_hash=api_hash)
+def sort_by_key(list_):
+    return list_['id']
 async def main(phone):
     await client.start()
     print(f"{Fore.CYAN}Connection has been initiated")
@@ -105,11 +107,11 @@ async def main(phone):
                 )
         except:
             output_file = "telegram_personal_me"
-        with open(f'{output_file}.json', 'w') as outfile:
-            if input("Sort? [Y/N]: ").lower() == 'y':
-                json.dump(all_messages.sort(lambda x:x['id']), outfile, cls=DateTimeEncoder, indent=4)
-            else:
-                json.dump(all_messages, outfile, cls=DateTimeEncoder, indent=4)
+    with open(f'{output_file}.json', 'w') as outfile:
+        if input("Sort? [Y/N]: ").lower() == 'y':
+            json.dump(sorted(all_messages, key=sort_by_key), outfile, cls=DateTimeEncoder, indent=4)
+        else:
+            json.dump(all_messages, outfile, cls=DateTimeEncoder, indent=4)
     print(f"{Fore.GREEN}Messages has been retrived and saved in {output_file}.json file successfully")
     
 with client:
