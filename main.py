@@ -1,13 +1,17 @@
-import configparser, json
+import configparser, json, os
 from getpass import getpass
 from datetime import datetime
-from colorama import init as colorInit, Fore
+from textwrap import indent
 
+from colorama import init as colorInit, Fore
 colorInit(autoreset=True)
+
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
 from telethon.tl.functions.messages import GetHistoryRequest
+from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import PeerChannel
+from telethon.tl.functions.channels import GetFullChannelRequest
 
 # Some functions to parse json date
 
@@ -44,13 +48,23 @@ async def main(phone):
         except SessionPasswordNeededError:
             await client.sign_in(password=getpass(prompt="Enter (Telegram) Password: "))
 
-    user_input_channel = input("Enter Channel ID or URL: ")
+    user_input_channel = input("Enter Channel (ID, URL or Name): ")
     if user_input_channel.isdigit():
         entity = PeerChannel(int(user_input_channel))
     else:
         entity = user_input_channel
-    myChannel = await client.get_entity(entity)
     
+    myChannel = await client.get_input_entity(entity)
+    if 'user_id' in myChannel.stringify():
+        chn = await client(GetFullUserRequest(myChannel.user_id))
+        user_details = chn.user
+        channel_title = user_details.first_name + " " + user_details.last_name
+    elif 'channel_id' in myChannel.stringify():
+        chn = await client(GetFullChannelRequest(myChannel.channel_id))
+        channel_title = chn.chats[0].title
+    else:
+        channel_title = 'Personal (ME)'
+        
     # Reading messages from channels
 
     offset_id = 0
@@ -61,9 +75,10 @@ async def main(phone):
 
     while True:
         print("""{}Informations
+            Channel: {}
             Current Offset ID: {}
             Total Messages: {}
-            """.format(Fore.CYAN, offset_id, total_messages))
+            """.format(Fore.CYAN, channel_title, offset_id, total_messages))
         history = await client(GetHistoryRequest(
             peer=myChannel,
             offset_id=offset_id,
@@ -82,10 +97,17 @@ async def main(phone):
         offset_id = messages[len(messages)-1].id
         total_messages = len(all_messages)
         if total_count_limit != 0 and total_messages >= total_count_limit:
-            break
-        with open('channel_messages.json', 'w') as outfile:
+            break   
+        try:
+            output_file = os.path.join(
+                os.path.abspath(os.path.dirname(__file__)),
+                "telegram_{}".format(str(channel_title).lower().replace(' ', '_'))
+                )
+        except:
+            output_file = "telegram_personal_me"
+        with open(f'{output_file}.json', 'w') as outfile:
             json.dump(all_messages, outfile, cls=DateTimeEncoder, indent=4)
-    print(f"{Fore.GREEN}Messages has been retrived and saved in channel_messages.json file successfully")
-            
+    print(f"{Fore.GREEN}Messages has been retrived and saved in {output_file}.json file successfully")
+    
 with client:
     client.loop.run_until_complete(main(phone))
