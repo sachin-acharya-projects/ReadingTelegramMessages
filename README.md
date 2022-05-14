@@ -16,4 +16,5 @@ _____________________________________________________
 
     channels = CHANNEL_ID_OR_URL_FROM_TELEGRAM_TO_READ_MESSAGE_SEPARATED_WITH_SPACES (https://t.me/channelid, channelid)
 ````
-[Get API here](https://my.telegram.org/apps)
+[Get API here](https://my.telegram.org/apps)  
+[Reference](https://betterprogramming.pub/how-to-get-data-from-telegram-82af55268a4b)
