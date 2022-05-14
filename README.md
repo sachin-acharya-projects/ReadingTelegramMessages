@@ -6,6 +6,8 @@ _____________________________________________________
 [Telegram]
     # Structure for config.ini file
     # quote, "" can be ommited
+    # Get API FROM
+    # https://my.telegram.org/apps
     api_id = YOUR_API_ID_FROM_TELEGRAM
     api_hash = YOUR_API_HASH_FROM_TELEGRAM
 
@@ -14,3 +16,4 @@ _____________________________________________________
 
     channels = CHANNEL_ID_OR_URL_FROM_TELEGRAM_TO_READ_MESSAGE_SEPARATED_WITH_SPACES (https://t.me/channelid, channelid)
 ````
+(Get API here)[https://my.telegram.org/apps]
