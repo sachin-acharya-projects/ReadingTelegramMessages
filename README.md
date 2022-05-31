@@ -1,4 +1,4 @@
-# ReadingTelegramMessages
+# Reading Telegram Messages
 This simple program reads Messages from telegram using Telegram API and Telethon Python Package (It cannot read personal messages, yet!)
 _____________________________________________________
 ### Configurations
