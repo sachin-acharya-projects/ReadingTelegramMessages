@@ -1,10 +1,8 @@
 import configparser, json, os
 from getpass import getpass
 from datetime import datetime
-from textwrap import indent
-
-from colorama import init as colorInit, Fore
-colorInit(autoreset=True)
+from sqlite3 import OperationalError
+from colorama import init, Fore; init(autoreset=True)
 
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
@@ -12,7 +10,6 @@ from telethon.tl.functions.messages import GetHistoryRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import PeerChannel
 from telethon.tl.functions.channels import GetFullChannelRequest
-
 # Some functions to parse json date
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -35,8 +32,13 @@ phone = config['Telegram']['phone']
 username = config['Telegram']['username']
 
 # Creating Client Object and connecting using these credentials
+try:
+    client = TelegramClient(username, api_id=api_id, api_hash=api_hash)
+except OperationalError:
+    client = TelegramClient(None, api_id=api_id, api_hash=api_hash)
 
-client = TelegramClient(username, api_id=api_id, api_hash=api_hash)
+history = []
+
 def sort_by_key(list_):
     return list_['id']
 async def main(phone):
@@ -113,6 +115,7 @@ async def main(phone):
         else:
             json.dump(all_messages, outfile, cls=DateTimeEncoder, indent=4)
     print(f"{Fore.GREEN}Messages has been retrived and saved in {output_file}.json file successfully")
-    
+    await client.disconnect()
+
 with client:
     client.loop.run_until_complete(main(phone))
